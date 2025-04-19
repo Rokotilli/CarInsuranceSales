@@ -1,3 +1,4 @@
 ﻿{
-  "BotToken": ""
+  "BotToken": "",
+  "StartMessage": "Hi there! I'm here to help you purchase your car insurance quickly and easily.\n\nTo get started, please send us the following documents:\n📄 A photo of your passport\n🚙 A photo of your vehicle identification document (technical passport)\n\nOnce we receive these, we’ll guide you through the next steps! 😊"
 }
