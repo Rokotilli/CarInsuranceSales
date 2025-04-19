@@ -1,4 +1,9 @@
 ﻿{
   "BotToken": "",
-  "StartMessage": "Hi there! I'm here to help you purchase your car insurance quickly and easily.\n\nTo get started, please send us the following documents:\n📄 A photo of your passport\n🚙 A photo of your vehicle identification document (technical passport)\n\nOnce we receive these, we’ll guide you through the next steps! 😊"
+  "StartMessage": "Hi there! I'm here to help you purchase your car insurance quickly and easily.\n\nTo get started, please send us the following documents:\n📄 A photo of your passport\n🚙 A photo of your vehicle identification document (technical passport)\n\nOnce we receive these, we’ll guide you through the next steps! 😊",
+  "IncorrectPhotosMessage": "Sorry, but the photos you sent are not clear enough, or in incorrect order. Please make sure they are well-lit and correct order (first your passport, second technical passport).",
+  "PhotosShouldBeInOneMessage": "Please send the photos in one message and in correct order (first your passport, second technical passport).",
+  "Mindee": {
+    "ApiKey": ""
+  }
 }
