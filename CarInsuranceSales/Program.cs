@@ -1,7 +1,10 @@
 ﻿using CarInsuranceSales;
+using CarInsuranceSales.Interfaces;
+using CarInsuranceSales.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mindee.Extensions.DependencyInjection;
 using Serilog;
 using Telegram.Bot;
 
@@ -23,7 +26,12 @@ var host = Host.CreateDefaultBuilder()
 
         var config = ctx.Configuration.Get<Config>();
 
+        services.AddMindeeClient();
+
         services.AddSingleton(new TelegramBotClient(config.BotToken));
+
+        services.AddScoped<IMindeeAPIService, MindeeAPIService>();
+        services.AddScoped<ITelegramService, TelegramService>();
 
         services.AddScoped<BotHandler>();
     })

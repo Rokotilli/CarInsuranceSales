@@ -1,4 +1,18 @@
 ﻿{
   "BotToken": "",
-  "StartMessage": "Hi there! I'm here to help you purchase your car insurance quickly and easily.\n\nTo get started, please send us the following documents:\n📄 A photo of your passport\n🚙 A photo of your vehicle identification document (technical passport)\n\nOnce we receive these, we’ll guide you through the next steps! 😊"
+  "Messages": {
+    "StartMessage": "Hi there! I'm here to help you purchase your car insurance quickly and easily.\n\nTo get started, please send us the following documents:\n📄 A photo of your passport\n🚙 A photo of your vehicle identification document (technical passport)\n\nOnce we receive these, we’ll guide you through the next steps! 😊",
+    "IncorrectPhotoMessagge": "Sorry, the photo you sent is not clear enough. Please take a new photo and send it again.",
+    "PassportShouldBeSentInOneMessage": "Please send one photo in message. It should be your passport.",
+    "TechnicalPassportShouldBeSentInOneMessage": "Please send one photo in message. It should be your technical passport.",
+    "PassportSubmittedMessage": "Great! We have processed your passport. Please send us a photo of your vehicle identification document (technical passport).",
+    "DataSubmittedMessage": "Great! We have processed your documents. The insurance will cost you $100, do you agree?",
+    "DataRejectedMessage": "Sorry for the inconvenience, please take another photos of your documents and try again.",
+    "CostDisagreedMessage": "We apologize, we are currently unable to provide the service in a different price range. Do you agree to the price of $100?",
+    "WeProcessedYourPhotoMessage": "We have processed your photo, please check the data is correct and we will continue",
+    "WeSavedYourDataMessage": "We have saved your data, you should not re-upload photos."
+  },
+  "Mindee": {
+    "ApiKey": ""
+  }
 }
