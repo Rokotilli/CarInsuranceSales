@@ -1,3 +1,24 @@
 ﻿{
-  "BotToken": ""
+  "BotToken": "",
+  "Messages": {
+    "StartMessage": "Hi there! I'm here to help you purchase your car insurance quickly and easily.\n\nTo get started, please send us the following documents:\n📄 A photo of your passport\n🚙 A photo of your vehicle identification document (technical passport)\n\nOnce we receive these, we’ll guide you through the next steps! 😊",
+    "IncorrectPhotoMessagge": "You are a telegram bot for buying car insurance, a user sent you a document that is impossible to recognize, apologize and ask the user to retake the photo of document, and indicate that the photos must be sent in strict order, first the passport then the technical passport, write a text up to 15.",
+    "PassportShouldBeSentInOneMessage": "You are a telegram bot for buying car insurance, a user sent you two photos in one message, ask to send one photo with a passport document in one message, write the text up to 15.",
+    "TechnicalPassportShouldBeSentInOneMessage": "You are a telegram bot for buying car insurance, a user sent you two photos in one message, ask to send one photo with a technical passport document in one message, write the text up to 15.",
+    "PassportSubmittedMessage": "You are a telegram bot for buying car insurance, you have successfully processed the passport document, ask the user to send the document identifying the vehicle (technical passport), write the text up to 15.",
+    "DataSubmittedMessage": "You are a telegram bot for buying car insurance, you have successfully processed all the documents, offer the user to buy insurance for $100, write a text up to 15.",
+    "DataRejectedMessage": "You are a telegram bot for buying car insurance, the user rejected the data that you recognized in the photo, apologize and ask the user to retake the photo and try again, write a text up to 15.",
+    "CostDisagreedMessage": "You are a telegram bot for buying car insurance, the user is not satisfied with the insurance price, apologize and inform the user that the price of 100 dollars is the only one available at the moment and ask again if the user agrees to buy insurance, write a text up to 15.",
+    "WeProcessedYourPhotoMessage": "You are a telegram bot for buying car insurance, the user sent a photo again before confirming the previous information, ask the user to confirm the information before you continue, write the text up to 15.",
+    "WeSavedYourDataMessage": "You are a telegram bot for buying car insurance, the user sends photos after confirming all the necessary information, inform the user that you have saved all the necessary information and there is no need to send photos again and if he wants to repeat everything again, let him write the command /start, write the text up to 15.",
+    "GeneratedInsurancePolicyDocumentMessage": "You are a telegram bot for buying car insurance, you have all the necessary information about the user, generate a fake insurance policy document with information that i provided you and do not mention that it is fake. Here is the information:"
+  },
+  "Mindee": {
+    "ApiKey": ""
+  },
+  "OpenRouterAPI": {
+    "Name": "OpenRouterAPI",
+    "BaseAdress": "https://openrouter.ai/api/",
+    "APIKey": ""
+  }
 }
