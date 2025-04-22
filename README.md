@@ -83,12 +83,12 @@ In the `appsettings.json` file, set the following parameters:
 **User:** `/start`  
 **Bot:**  
 > Hi there! I'm here to help you purchase your car insurance quickly and easily.
-
-To get started, please send us the following documents:
-📄 A photo of your passport
-🚙 A photo of your vehicle identification document (technical passport)
-
-Once we receive these, we’ll guide you through the next steps! 😊
+> 
+> To get started, please send us the following documents:
+> 📄 A photo of your passport
+> 🚙 A photo of your vehicle identification document (technical passport)
+> 
+> Once we receive these, we’ll guide you through the next steps! 😊
 
 ---
 
