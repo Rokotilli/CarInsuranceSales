@@ -1,4 +1,5 @@
 ﻿using CarInsuranceSales;
+using CarInsuranceSales.Handlers;
 using CarInsuranceSales.Interfaces;
 using CarInsuranceSales.Services;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +40,8 @@ var host = Host.CreateDefaultBuilder()
         services.AddScoped<IMindeeAPIService, MindeeAPIService>();
         services.AddScoped<ITelegramService, TelegramService>();
         services.AddScoped<IOpenRouterAPIService, OpenRouterAPIService>();
+        services.AddScoped<IMessageHandler, MessageHandler>();
+        services.AddScoped<IUpdateHandler, UpdateHandler>();
 
         services.AddScoped<BotHandler>();
     })
