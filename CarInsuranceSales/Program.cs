@@ -26,12 +26,19 @@ var host = Host.CreateDefaultBuilder()
 
         var config = ctx.Configuration.Get<Config>();
 
+        services.AddHttpClient(config.OpenRouterAPI.Name, client =>
+        {
+            client.BaseAddress = new Uri(config.OpenRouterAPI.BaseAdress);
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.OpenRouterAPI.APIKey}");
+        });
+
         services.AddMindeeClient();
 
         services.AddSingleton(new TelegramBotClient(config.BotToken));
 
         services.AddScoped<IMindeeAPIService, MindeeAPIService>();
         services.AddScoped<ITelegramService, TelegramService>();
+        services.AddScoped<IOpenRouterAPIService, OpenRouterAPIService>();
 
         services.AddScoped<BotHandler>();
     })
