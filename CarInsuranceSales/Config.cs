@@ -4,6 +4,7 @@
     {
         public string BotToken { get; set; }
         public Messages Messages { get; set; }
+        public OpenRouterAPI OpenRouterAPI { get; set; }
     }
 
     public class Messages
@@ -18,5 +19,13 @@
         public string CostDisagreedMessage { get; set; }
         public string WeProcessedYourPhotoMessage { get; set; }
         public string WeSavedYourDataMessage { get; set; }
+        public string GeneratedInsurancePolicyDocumentMessage { get; set; }
+    }
+
+    public class OpenRouterAPI
+    {
+        public string Name { get; set; }
+        public string BaseAdress { get; set; }
+        public string APIKey { get; set; }
     }
 }
