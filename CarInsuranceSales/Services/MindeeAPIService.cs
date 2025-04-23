@@ -1,5 +1,6 @@
 ﻿using CarInsuranceSales.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Mindee;
 using Mindee.Http;
 using Mindee.Input;
@@ -14,12 +15,14 @@ namespace CarInsuranceSales.Services
         private readonly MindeeClient _mindeeClient;
         private readonly ITelegramService _telegramService;
         private readonly ILogger<IMindeeAPIService> _logger;
+        private readonly Config _config;
 
-        public MindeeAPIService(MindeeClient mindeeClient, ILogger<IMindeeAPIService> logger, ITelegramService telegramService)
+        public MindeeAPIService(MindeeClient mindeeClient, ILogger<IMindeeAPIService> logger, ITelegramService telegramService, IOptions<Config> options)
         {
             _mindeeClient = mindeeClient;
             _logger = logger;
             _telegramService = telegramService;
+            _config = options.Value;
         }
 
         public async Task<InternationalIdV2Document> ProcessInternationalIdAsync(PhotoSize photo)
@@ -51,9 +54,9 @@ namespace CarInsuranceSales.Services
             var inputSource = new LocalInputSource(filePath);
 
             var endpoint = new CustomEndpoint(
-                endpointName: "vehicle_identification_document",
-                accountName: "Toteman",
-                version: "1"
+                endpointName: _config.Mindee.EndpointName,
+                accountName: _config.Mindee.AccountName,
+                version: _config.Mindee.Version
             );
 
             var response = await _mindeeClient.EnqueueAndParseAsync<GeneratedV1>(inputSource, endpoint);
