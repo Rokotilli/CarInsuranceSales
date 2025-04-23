@@ -1,10 +1,8 @@
 ﻿using CarInsuranceSales;
+using CarInsuranceSales.BackgroundWorkers;
 using CarInsuranceSales.Handlers;
 using CarInsuranceSales.Interfaces;
 using CarInsuranceSales.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Mindee.Extensions.DependencyInjection;
 using Serilog;
 using Telegram.Bot;
@@ -34,6 +32,8 @@ var host = Host.CreateDefaultBuilder()
             client.BaseAddress = new Uri(config.OpenRouterAPI.BaseAdress);
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.OpenRouterAPI.ApiKey}");
         });
+
+        services.AddHostedService<KeepAliveWorker>();
 
         services.AddMindeeClient();
 
