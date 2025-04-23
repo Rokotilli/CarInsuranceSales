@@ -4,6 +4,7 @@
     {
         public string BotToken { get; set; }
         public Messages Messages { get; set; }
+        public Mindee Mindee { get; set; }
         public OpenRouterAPI OpenRouterAPI { get; set; }
     }
 
@@ -22,10 +23,18 @@
         public string GeneratedInsurancePolicyDocumentMessage { get; set; }
     }
 
+    public class Mindee
+    {
+        public string ApiKey { get; set; }
+        public string AccountName { get; set; }
+        public string EndpointName { get; set; }
+        public string Version { get; set; }
+    }
+
     public class OpenRouterAPI
     {
         public string Name { get; set; }
         public string BaseAdress { get; set; }
-        public string APIKey { get; set; }
+        public string ApiKey { get; set; }
     }
 }

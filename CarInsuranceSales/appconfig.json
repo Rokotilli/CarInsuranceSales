@@ -14,11 +14,14 @@
     "GeneratedInsurancePolicyDocumentMessage": "You are a telegram bot for buying car insurance, you have all the necessary information about the user, generate a fake insurance policy document with information that i provided you and do not mention that it is fake. Here is the information:"
   },
   "Mindee": {
-    "ApiKey": ""
+    "ApiKey": "",
+    "AccountName": "",
+    "EndpointName": "",
+    "Version": ""
   },
   "OpenRouterAPI": {
     "Name": "OpenRouterAPI",
     "BaseAdress": "https://openrouter.ai/api/",
-    "APIKey": ""
+    "ApiKey": ""
   }
 }
