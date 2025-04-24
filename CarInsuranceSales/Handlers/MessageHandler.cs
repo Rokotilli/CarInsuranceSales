@@ -44,72 +44,80 @@ namespace CarInsuranceSales.Handlers
                 return;
             }
 
-            if (msg.Photo != null)
+            try
             {
-                if ((sessions[msg.Chat.Id].IsInternationalDocumentProcessed || sessions[msg.Chat.Id].IsGeneratedDocumentProcessed))
+                if (msg.Photo != null)
                 {
-                    if (sessions[msg.Chat.Id].HaveToSendMessage)
+                    if ((sessions[msg.Chat.Id].IsInternationalDocumentProcessed || sessions[msg.Chat.Id].IsGeneratedDocumentProcessed))
                     {
-                        await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.WeProcessedYourPhotoMessage, _botClient, _openRouterAPIService, null);
+                        if (sessions[msg.Chat.Id].HaveToSendMessage)
+                        {
+                            await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.WeProcessedYourPhotoMessage, _botClient, _openRouterAPIService, null);
 
+                            sessions[msg.Chat.Id].HaveToSendMessage = false;
+
+                            _logger.LogInformation($"Sent WeProcessedYourPhotoMessage to chat: {msg.Chat.Id}");
+                        }
+
+                        return;
+                    }
+
+                    if (msg.MediaGroupId != null)
+                    {
+                        if (sessions[msg.Chat.Id].HaveToSendMessage)
+                        {
+                            if (sessions[msg.Chat.Id].PhotosProcessedCount == 0)
+                            {
+                                await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.PassportShouldBeSentInOneMessage, _botClient, _openRouterAPIService, null);
+
+                                _logger.LogInformation($"Sent PassportShouldBeSentInOneMessage message to chat: {msg.Chat.Id}");
+                            }
+
+                            if (sessions[msg.Chat.Id].PhotosProcessedCount == 1)
+                            {
+                                await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.TechnicalPassportShouldBeSentInOneMessage, _botClient, _openRouterAPIService, null);
+
+                                _logger.LogInformation($"Sent TechnicalPassportShouldBeSentInOneMessage message to chat: {msg.Chat.Id}");
+                            }
+
+                            sessions[msg.Chat.Id].HaveToSendMessage = false;
+                        }
+
+                        return;
+                    }
+
+                    if (sessions[msg.Chat.Id].PhotosProcessedCount == 2 && !sessions[msg.Chat.Id].WeProcessedMessageSent && sessions[msg.Chat.Id].HaveToSendMessage)
+                    {
+                        await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.WeSavedYourDataMessage, _botClient, _openRouterAPIService, null);
+
+                        sessions[msg.Chat.Id].WeProcessedMessageSent = true;
                         sessions[msg.Chat.Id].HaveToSendMessage = false;
 
-                        _logger.LogInformation($"Sent WeProcessedYourPhotoMessage to chat: {msg.Chat.Id}");
-                    }                    
+                        _logger.LogInformation($"Sent WeSavedYourDataMessage to chat: {msg.Chat.Id}");
 
-                    return;
-                }
+                        return;
+                    }
 
-                if (msg.MediaGroupId != null)
-                {
-                    if (sessions[msg.Chat.Id].HaveToSendMessage)
+                    _logger.LogInformation($"Received photo from chat: {msg.Chat.Id}");
+
+                    await RunWithTypingAsync(_botClient, msg.Chat.Id, async () =>
                     {
                         if (sessions[msg.Chat.Id].PhotosProcessedCount == 0)
                         {
-                            await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.PassportShouldBeSentInOneMessage, _botClient, _openRouterAPIService, null);
-
-                            _logger.LogInformation($"Sent PassportShouldBeSentInOneMessage message to chat: {msg.Chat.Id}");
+                            await ProcessPassportPhotoAsync(msg.Chat.Id, msg, sessions[msg.Chat.Id]);
                         }
-
-                        if (sessions[msg.Chat.Id].PhotosProcessedCount == 1)
+                        else if (sessions[msg.Chat.Id].PhotosProcessedCount == 1)
                         {
-                            await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.TechnicalPassportShouldBeSentInOneMessage, _botClient, _openRouterAPIService, null);
-
-                            _logger.LogInformation($"Sent TechnicalPassportShouldBeSentInOneMessage message to chat: {msg.Chat.Id}");
+                            await ProcessTechnicalPassportPhotoAsync(msg.Chat.Id, msg, sessions[msg.Chat.Id]);
                         }
-
-                        sessions[msg.Chat.Id].HaveToSendMessage = false;
-                    }
-
-                    return;
+                    });
                 }
-
-                if (sessions[msg.Chat.Id].PhotosProcessedCount == 2 && !sessions[msg.Chat.Id].WeProcessedMessageSent && sessions[msg.Chat.Id].HaveToSendMessage)
-                {
-                    await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.WeSavedYourDataMessage, _botClient, _openRouterAPIService, null);
-
-                    sessions[msg.Chat.Id].WeProcessedMessageSent = true;
-                    sessions[msg.Chat.Id].HaveToSendMessage = false;
-
-                    _logger.LogInformation($"Sent WeSavedYourDataMessage to chat: {msg.Chat.Id}");
-
-                    return;
-                }
-
-                _logger.LogInformation($"Received photo from chat: {msg.Chat.Id}");
-
-                await RunWithTypingAsync(_botClient, msg.Chat.Id, async () =>
-                {
-                    if (sessions[msg.Chat.Id].PhotosProcessedCount == 0)
-                    {
-                        await ProcessPassportPhotoAsync(msg.Chat.Id, msg, sessions[msg.Chat.Id]);
-                    }
-                    else if (sessions[msg.Chat.Id].PhotosProcessedCount == 1)
-                    {
-                        await ProcessTechnicalPassportPhotoAsync(msg.Chat.Id, msg, sessions[msg.Chat.Id]);
-                    }
-                });              
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error processing message: {msg.Text} from chat: {msg.Chat.Id} error: {ex.Message}");
+                await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.ErrorMessage, _botClient, _openRouterAPIService, null);
+            }            
         }
 
         private async Task ProcessPassportPhotoAsync(long chatId, Message msg, ChatSessionData session)
