@@ -21,6 +21,7 @@
         public string WeProcessedYourPhotoMessage { get; set; }
         public string WeSavedYourDataMessage { get; set; }
         public string GeneratedInsurancePolicyDocumentMessage { get; set; }
+        public string ErrorMessage { get; set; }
     }
 
     public class Mindee
