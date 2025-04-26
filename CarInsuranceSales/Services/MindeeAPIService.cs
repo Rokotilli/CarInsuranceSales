@@ -66,7 +66,7 @@ namespace CarInsuranceSales.Services
                 File.Delete(filePath);
             }
 
-            _logger.LogInformation($"Processed Vehicle Identification Document with VIN: {response.Document.Inference.Prediction.Fields["vin"].Last().Values.Last().GetRawText()}");
+            _logger.LogInformation($"Processed Vehicle Identification Document with VIN: {response.Document.Inference.Prediction.Fields["vehicle_identification_number"].Last().Values.Last().GetRawText()}");
 
             return response.Document.Inference.Prediction;
         }
