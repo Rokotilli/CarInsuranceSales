@@ -1,5 +1,6 @@
 ﻿using CarInsuranceSales.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Mindee;
 using Mindee.Http;
 using Mindee.Input;
@@ -14,12 +15,14 @@ namespace CarInsuranceSales.Services
         private readonly MindeeClient _mindeeClient;
         private readonly ITelegramService _telegramService;
         private readonly ILogger<IMindeeAPIService> _logger;
+        private readonly Config _config;
 
-        public MindeeAPIService(MindeeClient mindeeClient, ILogger<IMindeeAPIService> logger, ITelegramService telegramService)
+        public MindeeAPIService(MindeeClient mindeeClient, ILogger<IMindeeAPIService> logger, ITelegramService telegramService, IOptions<Config> options)
         {
             _mindeeClient = mindeeClient;
             _logger = logger;
             _telegramService = telegramService;
+            _config = options.Value;
         }
 
         public async Task<InternationalIdV2Document> ProcessInternationalIdAsync(PhotoSize photo)
@@ -40,24 +43,6 @@ namespace CarInsuranceSales.Services
             _logger.LogInformation($"Processed International ID for: " + (response.Document.Inference.Prediction.GivenNames.Count() != 0 ? response.Document.Inference.Prediction.GivenNames[0].Value : "NotFound"));
 
             return response.Document.Inference.Prediction;
-
-            //var mockInternationalIdV2Document = new InternationalIdV2Document
-            //{
-            //    GivenNames = new List<StringField>
-            //    {
-            //        new StringField("John", "John", 0.99, null, null),
-            //    },
-            //    Surnames = new List<StringField>
-            //    {
-            //        new StringField("Doe", "Doe", 0.99, null, null),
-            //    },
-            //    DocumentNumber = new StringField("A12345678", "A12345678", 0.99, null, null),
-            //    ExpiryDate = new DateField("2030-01-01", 0.99, null, null, false)
-            //};
-
-            //_logger.LogInformation($"Processed International ID for: " + (mockInternationalIdV2Document.GivenNames.Count() != 0 ? mockInternationalIdV2Document.GivenNames[0].Value : "NotFound"));
-
-            //return mockInternationalIdV2Document;
         }
 
         public async Task<GeneratedV1Document> ProcessVehicleIdentificationDocumentAsync(PhotoSize photo)
@@ -69,9 +54,9 @@ namespace CarInsuranceSales.Services
             var inputSource = new LocalInputSource(filePath);
 
             var endpoint = new CustomEndpoint(
-                endpointName: "vehicle_identification_document",
-                accountName: "Toteman",
-                version: "1"
+                endpointName: _config.Mindee.EndpointName,
+                accountName: _config.Mindee.AccountName,
+                version: _config.Mindee.Version
             );
 
             var response = await _mindeeClient.EnqueueAndParseAsync<GeneratedV1>(inputSource, endpoint);
@@ -84,21 +69,6 @@ namespace CarInsuranceSales.Services
             _logger.LogInformation($"Processed Vehicle Identification Document with VIN: {response.Document.Inference.Prediction.Fields["vin"].Last().Values.Last().GetRawText()}");
 
             return response.Document.Inference.Prediction;
-
-            //var mockGeneratedV1Document = new GeneratedV1Document
-            //{
-            //    Fields = new Dictionary<string, GeneratedFeature>
-            //    {
-            //        { "vin", new GeneratedFeature(false) { new GeneratedObject { { "value", JsonDocument.Parse("\"1HGCM82633A123456\"").RootElement } } } },
-            //        { "make", new GeneratedFeature(false) { new GeneratedObject { { "value", JsonDocument.Parse("\"Honda\"").RootElement } } } },
-            //        { "model", new GeneratedFeature(false) { new GeneratedObject { { "value", JsonDocument.Parse("\"Accord\"").RootElement } } } },
-            //        { "year", new GeneratedFeature(false) { new GeneratedObject { { "value", JsonDocument.Parse("\"2023\"").RootElement } } } }
-            //    }
-            //};
-
-            //_logger.LogInformation($"Processed Vehicle Identification Document with VIN: {mockGeneratedV1Document.Fields["vin"].Last().Values.Last().GetRawText()}");
-
-            //return mockGeneratedV1Document;
         }
     }
 }

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CarInsuranceSales": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
