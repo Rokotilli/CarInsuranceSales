@@ -1,6 +1,7 @@
 ﻿using CarInsuranceSales.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Text.RegularExpressions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -159,7 +160,7 @@ namespace CarInsuranceSales.Handlers
         {
             var result = await _mindeeAPIService.ProcessVehicleIdentificationDocumentAsync(msg.Photo.Last());
 
-            if (result.Fields["vin"].Last().Values.Last().ValueKind == System.Text.Json.JsonValueKind.Null)
+            if (result.Fields["vehicle_identification_number"].Last().Values.Last().ValueKind == System.Text.Json.JsonValueKind.Null)
             {
                 var aiResponse = await _openRouterAPIService.GetMessageAsync(_config.Messages.IncorrectPhotoMessagge);
 
@@ -170,12 +171,11 @@ namespace CarInsuranceSales.Handlers
                 return;
             }
 
-            var message = $"VIN: {result.Fields["vin"].Last().Values.Last().GetRawText()}\n" +
-                                      $"License plate: {result.Fields["license_plate"].Last().Values.Last().GetRawText()}\n" +
-                                      $"Manufacturer: {result.Fields["manufacturer"].Last().Values.Last().GetRawText()}\n" +
-                                      $"Model: {result.Fields["model"].Last().Values.Last().GetRawText()}\n" +
-                                      $"Manufacturing date: {result.Fields["manufacturing_date"].Last().Values.Last().GetRawText()}\n\n" +
-                                      "This information is correct?";
+            var message = $"VIN: {result.Fields["vehicle_identification_number"].Last().Values.Last().GetRawText()}\n" +
+                          $"Manufacturer: {result.Fields["manufacturer"].Last().Values.Last().GetRawText()}\n" +
+                          $"Model: {result.Fields["model"].Last().Values.Last().GetRawText()}\n" +
+                          $"Color: {Regex.Unescape(result.Fields["color"].Last().Values.Last().GetRawText())}\n\n" +
+                          "This information is correct?";
 
             await _botClient.SendMessage(msg.Chat.Id, message, replyMarkup: InitializeInlineKeyboard("technicalPassportSubmitted", "technicalPassportRejected"));
 
