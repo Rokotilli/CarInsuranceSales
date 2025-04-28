@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Mindee.Product.Generated;
 using Mindee.Product.InternationalId;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace CarInsuranceSales.Services
 {
@@ -57,11 +58,10 @@ namespace CarInsuranceSales.Services
                     new { role = "user", content = _config.Messages.GeneratedInsurancePolicyDocumentMessage +
                     "International passport:" + JsonConvert.SerializeObject(internationalPassportDocument) +
                     "And Vehicle Information:" +
-                    $"VIN: {technicalPassportDocument.Fields["vin"].Last().Values.Last().GetRawText()}\n" +
-                    $"License plate: {technicalPassportDocument.Fields["license_plate"].Last().Values.Last().GetRawText()}\n" +
+                    $"VIN: {technicalPassportDocument.Fields["vehicle_identification_number"].Last().Values.Last().GetRawText()}\n" +
                     $"Manufacturer: {technicalPassportDocument.Fields["manufacturer"].Last().Values.Last().GetRawText()}\n" +
                     $"Model: {technicalPassportDocument.Fields["model"].Last().Values.Last().GetRawText()}\n" +
-                    $"Manufacturing date: {technicalPassportDocument.Fields["manufacturing_date"].Last().Values.Last().GetRawText()}"}
+                    $"Color: {Regex.Unescape(technicalPassportDocument.Fields["color"].Last().Values.Last().GetRawText())}"}
                 }
             };
 
