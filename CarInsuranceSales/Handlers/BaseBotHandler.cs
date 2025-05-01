@@ -65,8 +65,9 @@ namespace CarInsuranceSales.Handlers
         public bool IsInternationalDocumentProcessed { get; set; } = false;
         public bool IsGeneratedDocumentProcessed { get; set; } = false;
 
-        public bool WeProcessedMessageSent { get; set; } = false;
-        public bool HaveToSendMessage { get; set; } = true;
+        public bool WeSavedYourDataMessageSent { get; set; } = false;
+        public bool WrongMessageReceivedMessageSent { get; set; } = false;
+        public bool HaveToSendMessage { get; set; } = true;        
 
         public InternationalIdV2Document? InternationalDocument { get; set; }
         public GeneratedV1Document? GeneratedDocument { get; set; }
@@ -77,7 +78,8 @@ namespace CarInsuranceSales.Handlers
             ReceivedPhotosCount = 0;
             IsInternationalDocumentProcessed = false;
             IsGeneratedDocumentProcessed = false;
-            WeProcessedMessageSent = false;
+            WeSavedYourDataMessageSent = false;            
+            WrongMessageReceivedMessageSent = false;
             HaveToSendMessage = true;
             InternationalDocument = null;
             GeneratedDocument = null;
