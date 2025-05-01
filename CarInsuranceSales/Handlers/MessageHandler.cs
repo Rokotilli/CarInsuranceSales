@@ -55,7 +55,7 @@ namespace CarInsuranceSales.Handlers
                         {
                             await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.WeProcessedYourPhotoMessage, _botClient, _openRouterAPIService, null);
 
-                            sessions[msg.Chat.Id].HaveToSendMessage = true;
+                            sessions[msg.Chat.Id].HaveToSendMessage = false;
 
                             _logger.LogInformation($"Sent WeProcessedYourPhotoMessage to chat: {msg.Chat.Id}");
                         }
