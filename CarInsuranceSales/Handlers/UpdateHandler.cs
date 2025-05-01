@@ -32,6 +32,7 @@ namespace CarInsuranceSales.Handlers
                     session.PhotosProcessedCount = 1;
                     session.IsInternationalDocumentProcessed = false;
                     session.HaveToSendMessage = true;
+                    session.WrongMessageReceivedMessageSent = false;
 
                     await SendAiMessageWithTypingAsync(chatId, _config.Messages.PassportSubmittedMessage, _botClient, _openRouterAPIService, null);
 
@@ -42,6 +43,7 @@ namespace CarInsuranceSales.Handlers
                     session.InternationalDocument = null;
                     session.IsInternationalDocumentProcessed = false;
                     session.HaveToSendMessage = true;
+                    session.WrongMessageReceivedMessageSent = false;
 
                     await SendAiMessageWithTypingAsync(chatId, _config.Messages.DataRejectedMessage, _botClient, _openRouterAPIService, null);
 
@@ -52,6 +54,7 @@ namespace CarInsuranceSales.Handlers
                     session.PhotosProcessedCount = 2;
                     session.IsGeneratedDocumentProcessed = false;
                     session.HaveToSendMessage = true;
+                    session.WrongMessageReceivedMessageSent = false;
 
                     await SendAiMessageWithTypingAsync(chatId, _config.Messages.DataSubmittedMessage, _botClient, _openRouterAPIService, InitializeInlineKeyboard("agreed", "disagreed"));
 
@@ -62,6 +65,7 @@ namespace CarInsuranceSales.Handlers
                     session.IsGeneratedDocumentProcessed = false;
                     session.GeneratedDocument = null;
                     session.HaveToSendMessage = true;
+                    session.WrongMessageReceivedMessageSent = false;
 
                     await SendAiMessageWithTypingAsync(chatId, _config.Messages.DataRejectedMessage, _botClient, _openRouterAPIService, null);
 

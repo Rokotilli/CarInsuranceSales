@@ -22,6 +22,7 @@
         public string WeSavedYourDataMessage { get; set; }
         public string GeneratedInsurancePolicyDocumentMessage { get; set; }
         public string ErrorMessage { get; set; }
+        public string WrongMessage { get; set; }
     }
 
     public class Mindee

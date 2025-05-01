@@ -49,13 +49,13 @@ namespace CarInsuranceSales.Handlers
             {
                 if (msg.Photo != null)
                 {
-                    if ((sessions[msg.Chat.Id].IsInternationalDocumentProcessed || sessions[msg.Chat.Id].IsGeneratedDocumentProcessed))
+                    if (sessions[msg.Chat.Id].IsInternationalDocumentProcessed || sessions[msg.Chat.Id].IsGeneratedDocumentProcessed)
                     {
                         if (sessions[msg.Chat.Id].HaveToSendMessage)
                         {
                             await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.WeProcessedYourPhotoMessage, _botClient, _openRouterAPIService, null);
 
-                            sessions[msg.Chat.Id].HaveToSendMessage = false;
+                            sessions[msg.Chat.Id].HaveToSendMessage = true;
 
                             _logger.LogInformation($"Sent WeProcessedYourPhotoMessage to chat: {msg.Chat.Id}");
                         }
@@ -87,11 +87,11 @@ namespace CarInsuranceSales.Handlers
                         return;
                     }
 
-                    if (sessions[msg.Chat.Id].PhotosProcessedCount == 2 && !sessions[msg.Chat.Id].WeProcessedMessageSent && sessions[msg.Chat.Id].HaveToSendMessage)
+                    if (sessions[msg.Chat.Id].PhotosProcessedCount == 2 && !sessions[msg.Chat.Id].WeSavedYourDataMessageSent && sessions[msg.Chat.Id].HaveToSendMessage)
                     {
                         await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.WeSavedYourDataMessage, _botClient, _openRouterAPIService, null);
 
-                        sessions[msg.Chat.Id].WeProcessedMessageSent = true;
+                        sessions[msg.Chat.Id].WeSavedYourDataMessageSent = true;
                         sessions[msg.Chat.Id].HaveToSendMessage = false;
 
                         _logger.LogInformation($"Sent WeSavedYourDataMessage to chat: {msg.Chat.Id}");
@@ -112,6 +112,17 @@ namespace CarInsuranceSales.Handlers
                             await ProcessTechnicalPassportPhotoAsync(msg.Chat.Id, msg, sessions[msg.Chat.Id]);
                         }
                     });
+                }
+                else
+                {                    
+                    if (!sessions[msg.Chat.Id].WrongMessageReceivedMessageSent)
+                    {
+                        sessions[msg.Chat.Id].WrongMessageReceivedMessageSent = true;
+
+                        await SendAiMessageWithTypingAsync(msg.Chat.Id, _config.Messages.WrongMessage, _botClient, _openRouterAPIService, null);
+
+                        _logger.LogInformation($"Sent WrongMessage to chat: {msg.Chat.Id}");                        
+                    }                    
                 }
             }
             catch (Exception ex)
@@ -152,6 +163,7 @@ namespace CarInsuranceSales.Handlers
             session.IsInternationalDocumentProcessed = true;
             session.InternationalDocument = result;
             session.HaveToSendMessage = true;
+            session.WrongMessageReceivedMessageSent = false;
 
             _logger.LogInformation($"Processed passport photo from chat: {chatId}");
         }
@@ -183,6 +195,7 @@ namespace CarInsuranceSales.Handlers
             session.IsGeneratedDocumentProcessed = true;
             session.GeneratedDocument = result;
             session.HaveToSendMessage = true;
+            session.WrongMessageReceivedMessageSent = false;
 
             _logger.LogInformation($"Processed technical passport photo from chat: {msg.Chat.Id}");
         }
