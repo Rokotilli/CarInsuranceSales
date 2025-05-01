@@ -1,7 +1,11 @@
 ﻿using CarInsuranceSales;
+using CarInsuranceSales.Handlers;
+using CarInsuranceSales.Interfaces;
+using CarInsuranceSales.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mindee.Extensions.DependencyInjection;
 using Serilog;
 using Telegram.Bot;
 
@@ -14,7 +18,9 @@ Log.Logger = new LoggerConfiguration()
 var host = Host.CreateDefaultBuilder()
     .ConfigureAppConfiguration((ctx, con) =>
     {
-        con.AddJsonFile("appconfig.json", false, true).AddUserSecrets<Program>();
+        con.AddJsonFile("appconfig.json", false, true)        
+        .AddUserSecrets<Program>()
+        .AddEnvironmentVariables();
     })
     .UseSerilog()
     .ConfigureServices((ctx, services) =>
@@ -23,7 +29,21 @@ var host = Host.CreateDefaultBuilder()
 
         var config = ctx.Configuration.Get<Config>();
 
+        services.AddHttpClient(config.OpenRouterAPI.Name, client =>
+        {
+            client.BaseAddress = new Uri(config.OpenRouterAPI.BaseAdress);
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {config.OpenRouterAPI.ApiKey}");
+        });
+
+        services.AddMindeeClient();
+
         services.AddSingleton(new TelegramBotClient(config.BotToken));
+
+        services.AddScoped<IMindeeAPIService, MindeeAPIService>();
+        services.AddScoped<ITelegramService, TelegramService>();
+        services.AddScoped<IOpenRouterAPIService, OpenRouterAPIService>();
+        services.AddScoped<IMessageHandler, MessageHandler>();
+        services.AddScoped<IUpdateHandler, UpdateHandler>();
 
         services.AddScoped<BotHandler>();
     })
