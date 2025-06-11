@@ -23,6 +23,7 @@
   },
   "OpenRouterAPI": {
     "Name": "OpenRouterAPI",
+    "Model": "mistralai/mistral-small-3.1-24b-instruct:free",
     "BaseAdress": "https://openrouter.ai/api/",
     "ApiKey": ""
   }

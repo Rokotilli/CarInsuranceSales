@@ -52,7 +52,7 @@ namespace CarInsuranceSales.Services
         {
             var requestBody = new
             {
-                model = "mistralai/mistral-small-24b-instruct-2501:free",
+                model = _config.OpenRouterAPI.Model,
                 messages = new[]
                 {
                     new { role = "user", content = _config.Messages.GeneratedInsurancePolicyDocumentMessage +

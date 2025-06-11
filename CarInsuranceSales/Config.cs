@@ -36,6 +36,7 @@
     public class OpenRouterAPI
     {
         public string Name { get; set; }
+        public string Model { get; set; }
         public string BaseAdress { get; set; }
         public string ApiKey { get; set; }
     }
